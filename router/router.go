@@ -2,12 +2,16 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/iprologue/myBlog/service"
+	"github.com/iprologue/myBlog/middleware/jwt"
+	"github.com/iprologue/myBlog/router/api"
+	v1 "github.com/iprologue/myBlog/router/api/v1"
 )
 
 func InitRouter(r *gin.Engine)  {
 
-	GroupV1 := r.Group("/api/v1")
+	r.GET("/auth", api.GetAuth)
+
+	GroupV1 := r.Group("/api/v1").Use(jwt.JWT())
 	{
 		GroupV1.GET("/tags", v1.GetTags)
 		GroupV1.POST("/tags", v1.AddTag)

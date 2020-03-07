@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"fmt"
 	"github.com/go-ini/ini"
 	"log"
 	"time"
@@ -11,7 +12,7 @@ var (
 
 	RunMode string
 
-	HTTPPort     string
+	HTTPPort     int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
@@ -41,7 +42,7 @@ func LoadServer() {
 		log.Fatalf("Fail to get section 'server': %v", err)
 	}
 
-	HTTPPort = sec.Key("HTTP_PORT").MustString(":8080")
+	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
 	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
 	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
 }
@@ -53,5 +54,6 @@ func LoadApp() {
 	}
 
 	JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
+	fmt.Println("jwtSecret   ", JwtSecret)
 	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 }

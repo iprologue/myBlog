@@ -28,3 +28,14 @@ CREATE TABLE `blog_article` (
     `state` tinyint(3) unsigned DEFAULT '1' COMMENT '状态 0禁用1启用',
     PRIMARY KEY (`id`)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '文章管理';
+
+
+CREATE TABLE `blog_auth` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `username` varchar(50) DEFAULT '' COMMENT '账号',
+    `password` varchar(50) DEFAULT '' COMMENT '密码',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO `myBlog`.`blog_auth` (`id`, `username`, `password`) VALUES (null, 'test', 'test123456');
+
