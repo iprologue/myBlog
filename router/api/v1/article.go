@@ -216,7 +216,7 @@ func DeleteArticle(c *gin.Context)  {
 	if !valid.HasErrors() {
 		if models.ExistArticlerByID(id) {
 
-			models.
+			models.DeleteArticle(id)
 
 			code = errcode.SUCCESS
 		} else {
