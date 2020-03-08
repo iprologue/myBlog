@@ -1,59 +1,68 @@
 package setting
 
 import (
-	"fmt"
 	"github.com/go-ini/ini"
 	"log"
 	"time"
 )
 
-var (
-	Cfg *ini.File
+type App struct {
+	JwtSecret string
+	PageSize  int
 
-	RunMode string
+	PrefixUrl string
 
-	HTTPPort     int
+	RuntimeRootPath string
+
+	LogSavePath string
+	LogSaveName string
+	LogFileExt  string
+	TimeFormat  string
+}
+
+var AppSetting = &App{}
+
+type Server struct {
+	RunMode      string
+	HttpPort     string
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
+}
 
-	PageSize  int
-	JwtSecret string
-)
+var ServerSetting = &Server{}
+
+type DataBase struct {
+	Type        string
+	User        string
+	Password    string
+	Host        string
+	Name        string
+	TablePrefix string
+}
+
+var DataBaseSetting = &DataBase{}
+
+var cfg *ini.File
 
 func init() {
 	var err error
-	Cfg, err = ini.Load("config/app.ini")
+	cfg, err = ini.Load("config/app.ini")
 	if err != nil {
 		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
 	}
 
-	LoadBase()
-	LoadServer()
-	LoadApp()
+	mapTo("app", AppSetting)
+	mapTo("server", ServerSetting)
+	mapTo("database", DataBaseSetting)
+
+	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
+	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 }
 
-func LoadBase() {
-	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
-}
-
-func LoadServer() {
-	sec, err := Cfg.GetSection("server")
+func mapTo(section string, v interface{}) {
+	err := cfg.Section(section).MapTo(v)
 	if err != nil {
-		log.Fatalf("Fail to get section 'server': %v", err)
+		log.Fatalln("Cfg.MapTo %s err: %v", section, err)
 	}
 
-	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
-	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
-	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
-}
-
-func LoadApp() {
-	sec, err := Cfg.GetSection("app")
-	if err != nil {
-		log.Fatalf("Fail to get section 'app': %v", err)
-	}
-
-	JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
-	fmt.Println("jwtSecret   ", JwtSecret)
-	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
 }

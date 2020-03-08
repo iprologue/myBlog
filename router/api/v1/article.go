@@ -71,7 +71,7 @@ func GetArticles(c *gin.Context)  {
 	if !valid.HasErrors() {
 		code = errcode.SUCCESS
 
-		data["lists"] = models.GetArticles(util.GetPage(c), setting.PageSize, maps)
+		data["lists"] = models.GetArticles(util.GetPage(c), setting.AppSetting.PageSize, maps)
 		data["tatal"] = models.GetArticleToTal(maps)
 	} else {
 		for _, err := range valid.Errors {
@@ -118,7 +118,7 @@ func AddArticle(c *gin.Context)  {
 			models.AddArticle(data)
 			code = errcode.SUCCESS
 		} else {
-			code = errcode.ERROR_NOT_EXIST_ARTICLE
+			code = errcode.ERROR_NOT_EXIST_TAG
 		}
 	} else {
 		for _, err := range valid.Errors {

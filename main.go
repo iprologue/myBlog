@@ -9,10 +9,9 @@ import (
 
 func main() {
 	engine := gin.New()
-	engine.Use(gin.Logger(), gin.Recovery())
-	gin.SetMode(setting.RunMode)
+	gin.SetMode(setting.ServerSetting.RunMode)
 	router.InitRouter(engine)
-	err := engine.Run(":8000")
+	err := engine.Run(setting.ServerSetting.HttpPort)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

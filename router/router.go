@@ -3,12 +3,14 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/iprologue/myBlog/middleware/jwt"
+	"github.com/iprologue/myBlog/middleware/logger"
 	"github.com/iprologue/myBlog/router/api"
 	v1 "github.com/iprologue/myBlog/router/api/v1"
 )
 
 func InitRouter(r *gin.Engine)  {
 
+	r.Use(gin.Logger(), gin.Recovery(), logger.LoggerToFile())
 	r.GET("/auth", api.GetAuth)
 
 	GroupV1 := r.Group("/api/v1").Use(jwt.JWT())

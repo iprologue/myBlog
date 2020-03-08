@@ -31,7 +31,7 @@ func GetTags(c *gin.Context) {
 
 	code := errcode.SUCCESS
 
-	tags, err := models.GetTags(util.GetPage(c), setting.PageSize, maps)
+	tags, err := models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
 	if err != nil {
 		data["list"] = tags
 	}
