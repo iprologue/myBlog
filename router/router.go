@@ -2,16 +2,22 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/iprologue/myBlog/docs"
 	"github.com/iprologue/myBlog/middleware/jwt"
 	"github.com/iprologue/myBlog/middleware/logger"
 	"github.com/iprologue/myBlog/router/api"
-	v1 "github.com/iprologue/myBlog/router/api/v1"
+	"github.com/iprologue/myBlog/router/api/v1"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func InitRouter(r *gin.Engine)  {
 
 	r.Use(gin.Logger(), gin.Recovery(), logger.LoggerToFile())
+
 	r.GET("/auth", api.GetAuth)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 
 	GroupV1 := r.Group("/api/v1").Use(jwt.JWT())
 	{

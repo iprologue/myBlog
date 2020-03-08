@@ -13,7 +13,12 @@ import (
 )
 
 
-// 获取单个文章
+// @Summary 获取单个文章
+// @Produce  json
+// @Param id path int true "ID"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [get]
 func GetArticle(c *gin.Context)  {
 
 	appG := app.Gin{c}
@@ -49,7 +54,14 @@ func GetArticle(c *gin.Context)  {
 }
 
 
-// 获取多个文章
+// @Summary 获取多个文章
+// @Produce  json
+// @Param tag_id body int false "TagID"
+// @Param state body int false "State"
+// @Param created_by body string false "CreatedBy"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles [get]
 func GetArticles(c *gin.Context)  {
 	appG := app.Gin{c}
 	valid := validation.Validation{}
@@ -107,7 +119,17 @@ type AddArticleForm struct {
 	State int `form:"state" valid:"Range(0,1)"`
 }
 
-// 新增文章
+// @Summary 新增文章
+// @Produce  json
+// @Param tag_id body int true "TagID"
+// @param title body string true "Title"
+// @param desc body string true "Desc"
+// @param content body string true "Content"
+// @param created_by body string true "CreatedBy"
+// @param state body int true "State"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles [post]
 func AddArticle(c *gin.Context)  {
 	var (
 		appG = app.Gin{c}
@@ -157,7 +179,18 @@ type EditArticleForm struct {
 	State int `form:"state" valid:"Range(0,1)"`
 }
 
-// 修改文章
+// @Summary 修改文章
+// @Produce  json
+// @param id path int true "ID"
+// @param tag_id body int false "TagID"
+// @param title body string false "Title"
+// @param desc body string false "Desc"
+// @param content body string false "Content"
+// @Param modified_by body string true "ModifiedBy"
+// @Param state body int false "State"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [put]
 func EditArticle(c *gin.Context)  {
 	var (
 		appG = app.Gin{c}
@@ -209,7 +242,12 @@ func EditArticle(c *gin.Context)  {
 }
 
 
-// 删除文章
+// @Summary 删除文章
+// @Produce  json
+// @Param id path int true "ID"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [delete]
 func DeleteArticle(c *gin.Context)  {
 
 	appG := app.Gin{c}
