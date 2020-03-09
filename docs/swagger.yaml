@@ -68,6 +68,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: CoverImageUrl
+        in: body
+        name: cover_image_url
+        required: true
+        schema:
+          type: string
       - description: CreatedBy
         in: body
         name: created_by
@@ -156,6 +162,12 @@ paths:
       - description: Content
         in: body
         name: content
+        schema:
+          type: string
+      - description: CoverImageUrl
+        in: body
+        name: cover_image_url
+        required: true
         schema:
           type: string
       - description: ModifiedBy
@@ -322,4 +334,24 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: Get Auth
+  /upload:
+    post:
+      parameters:
+      - description: Image File
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 上传图片
 swagger: "2.0"

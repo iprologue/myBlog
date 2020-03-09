@@ -28,7 +28,7 @@ func CheckPermission(src string) bool {
 	return os.IsPermission(err)
 }
 
-func IsNotExistMDir(src string) error {
+func IsNotExistMKDir(src string) error {
 	if noExist := CheckExist(src); noExist == true {
 		if err := MkDir(src); err != nil {
 			return err
