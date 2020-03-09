@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	"github.com/iprologue/myBlog/pkg/setting"
 	"github.com/iprologue/myBlog/router"
+ 	"github.com/fvbock/endless"
 	"log"
 	"syscall"
 )
@@ -18,6 +18,7 @@ func main() {
 	engine := gin.New()
 	gin.SetMode(setting.ServerSetting.RunMode)
 	router.InitRouter(engine)
+
 	server := endless.NewServer(setting.ServerSetting.HttpPort, engine)
 	server.BeforeBegin = func(add string) {
 		log.Printf("Actual pid is %d", syscall.Getpid())
