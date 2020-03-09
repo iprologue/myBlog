@@ -18,7 +18,7 @@ type Model struct {
 	ModifiedOn int `json:"modified_on"`
 }
 
-func init() {
+func SetUp() {
 
 	var err error
 	db, err = gorm.Open(setting.DataBaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",

@@ -2,7 +2,7 @@ package logger
 
 import (
 	"github.com/gin-gonic/gin"
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -11,23 +11,26 @@ import (
 
 func LoggerToFile() gin.HandlerFunc {
 
-	fileName := getLogFilePath()
-	fullPath := getLogFileFullPath()
-	logFile := openLogFile(fullPath)
+	fileName := getLogFileName()
+	filePath := getLogFilePath()
+	file, err := openLogFile(fileName, filePath)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	logger := logrus.New()
 
-	logger.Out = logFile
+	logger.Out = file
 	logger.SetLevel(logrus.DebugLevel)
 
 	logs, err := rotatelogs.New(
-		fileName + "log%Y%m%d.log",
-		rotatelogs.WithLinkName(fileName),
+		filePath+fileName,
+		rotatelogs.WithLinkName(filePath),
 		rotatelogs.WithMaxAge(7*24*time.Hour),
 		rotatelogs.WithRotationTime(24*time.Hour),
 	)
 	if err != nil {
-		log.Fatalln("rotatelogs err: %v", err)
+		log.Fatalf("rotatelogs err: %v", err)
 	}
 
 	writerMaps := lfshook.WriterMap{

@@ -73,6 +73,13 @@ func EditArticle(id int, data interface{}) error {
 	return nil
 }
 
+func DeletedArticle(id int) error {
+	if err := db.Where("id = ?", id).Delete(Article{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func AddArticle(data map[string]interface{}) error {
 	article := Article{
 		TagID:   data["tag_id"].(int),

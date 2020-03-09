@@ -3,16 +3,16 @@ package service
 import "github.com/iprologue/myBlog/models"
 
 type Article struct {
-	ID int
-	TagId int
-	Title string
-	Desc string
-	Content string
-	State int
-	CreatedBy string
+	ID         int
+	TagId      int
+	Title      string
+	Desc       string
+	Content    string
+	State      int
+	CreatedBy  string
 	ModifiedBy string
 
-	PageNum int
+	PageNum  int
 	PageSize int
 }
 
@@ -35,10 +35,10 @@ func (a *Article) Add() error {
 
 func (a *Article) Edit() error {
 	return models.EditArticle(a.ID, map[string]interface{}{
-		"tag_id": a.TagId,
-		"title": a.Title,
-		"desc": a.Desc,
-		"state": a.State,
+		"tag_id":      a.TagId,
+		"title":       a.Title,
+		"desc":        a.Desc,
+		"state":       a.State,
 		"modified_by": a.ModifiedBy,
 	})
 }
@@ -64,7 +64,7 @@ func (a *Article) GetAll() ([]*models.Article, error) {
 }
 
 func (a *Article) Delete() error {
-	return models.DeleteArticle(a.TagId)
+	return models.DeleteTag(a.TagId)
 }
 
 func (a *Article) ExistByID() (bool, error) {

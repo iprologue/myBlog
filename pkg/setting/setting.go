@@ -10,7 +10,10 @@ type App struct {
 	JwtSecret string
 	PageSize  int
 
-	PrefixUrl string
+	PrefixUrl      string
+	ImageSavePath  string
+	ImageMaxSize   int
+	ImageAllowExts []string
 
 	RuntimeRootPath string
 
@@ -44,7 +47,7 @@ var DataBaseSetting = &DataBase{}
 
 var cfg *ini.File
 
-func init() {
+func SetUp() {
 	var err error
 	cfg, err = ini.Load("config/app.ini")
 	if err != nil {

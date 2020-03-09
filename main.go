@@ -1,13 +1,21 @@
 package main
 
 import (
+	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"github.com/iprologue/myBlog/common/util"
+	"github.com/iprologue/myBlog/models"
 	"github.com/iprologue/myBlog/pkg/setting"
 	"github.com/iprologue/myBlog/router"
- 	"github.com/fvbock/endless"
 	"log"
 	"syscall"
 )
+
+func init() {
+	setting.SetUp()
+	models.SetUp()
+	util.SetUp()
+}
 
 func main() {
 
