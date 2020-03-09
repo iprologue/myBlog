@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/iprologue/myBlog/common/function"
 	"github.com/jinzhu/gorm"
 )
 
@@ -101,17 +100,5 @@ func EditTag(id int, data interface{}) error {
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return err
 	}
-	return nil
-}
-
-func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("CreatedOn", function.GetTimeUnix())
-
-	return nil
-}
-
-func (tag *Tag) BeforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("ModifiedOn", function.GetTimeUnix())
-
 	return nil
 }

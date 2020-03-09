@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/iprologue/myBlog/common/function"
 	"github.com/jinzhu/gorm"
 )
 
@@ -45,7 +44,7 @@ func GetArticleToTal(maps interface{}) (int, error) {
 func GetArticles(page int, pageSize int, maps interface{}) ([]*Article, error) {
 	var articles []*Article
 	err := db.Preload("Tag").Where(maps).Offset(page).Limit(pageSize).Find(&articles).Error
-	if err != nil && err != gorm.ErrRecordNotFound{
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 
@@ -85,27 +84,6 @@ func AddArticle(data map[string]interface{}) error {
 	if err := db.Create(&article).Error; err != nil {
 		return err
 	}
-
-	return nil
-}
-
-func DeleteArticle(id int) error {
-
-	if err := db.Where("id = ?", id).Delete(&Article{}).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (article *Article) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("CreatedOn", function.GetTimeUnix())
-
-	return nil
-}
-
-func (article *Article) BeforeUpdate(scope *gorm.Scope) error {
-	scope.SetColumn("ModifiedOn", function.GetTimeUnix())
 
 	return nil
 }
