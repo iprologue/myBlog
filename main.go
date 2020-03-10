@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iprologue/myBlog/common/util"
 	"github.com/iprologue/myBlog/models"
+	"github.com/iprologue/myBlog/pkg/gredis"
 	"github.com/iprologue/myBlog/pkg/setting"
 	"github.com/iprologue/myBlog/router"
 	"log"
@@ -14,6 +15,7 @@ import (
 func init() {
 	setting.SetUp()
 	models.SetUp()
+	gredis.SetUp()
 	util.SetUp()
 }
 

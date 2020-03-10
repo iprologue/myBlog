@@ -1,6 +1,12 @@
 package service
 
-import "github.com/iprologue/myBlog/models"
+import (
+	"encoding/json"
+	"github.com/iprologue/myBlog/models"
+	"github.com/iprologue/myBlog/pkg/gredis"
+	"github.com/iprologue/myBlog/service/cache_service"
+	"log"
+)
 
 type Tag struct {
 	ID int
@@ -47,11 +53,31 @@ func (t *Tag) Count() (int, error) {
 }
 
 func (t *Tag) GetAll() ([]models.Tag, error) {
+	var cacheTags []models.Tag
+
+	cache := cache_service.Tag{
+		State:    t.State,
+
+		PageNum:  t.PageNum,
+		PageSize: t.PageSize,
+	}
+	key := cache.GetTagKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			log.Println(err)
+		} else  {
+			json.Unmarshal(data, &cacheTags)
+			return cacheTags, nil
+		}
+	}
 
 	tags, err := models.GetTags(t.PageNum, t.PageSize, t.getMaps())
 	if err != nil {
 		return nil, err
 	}
+
+	gredis.Set(key, tags, 3600)
 	return tags, nil
 
 }

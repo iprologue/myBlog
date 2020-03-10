@@ -103,7 +103,7 @@ func GetArticles(c *gin.Context) {
 
 	data := make(map[string]interface{})
 	data["lists"] = articles
-	data["tatal"] = total
+	data["total"] = total
 
 	appG.Response(http.StatusOK, errcode.SUCCESS, data)
 }

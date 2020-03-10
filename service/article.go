@@ -1,6 +1,12 @@
 package service
 
-import "github.com/iprologue/myBlog/models"
+import (
+	"encoding/json"
+	"github.com/iprologue/myBlog/models"
+	"github.com/iprologue/myBlog/pkg/gredis"
+	"github.com/iprologue/myBlog/service/cache_service"
+	"log"
+)
 
 type Article struct {
 	ID            int
@@ -48,22 +54,58 @@ func (a *Article) Edit() error {
 }
 
 func (a *Article) Get() (*models.Article, error) {
+	var cacheArticle *models.Article
+
+	cache := cache_service.Article{ID: a.ID}
+	key := cache.GetArticleKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			log.Println(err)
+		} else {
+			json.Unmarshal(data, &cacheArticle)
+			return cacheArticle, nil
+		}
+	}
+
 	article, err := models.GetArticle(a.ID)
 	if err != nil {
 		return nil, err
 	}
 
+	gredis.Set(key, article, 3600)
 	return article, nil
 }
 
 func (a *Article) GetAll() ([]*models.Article, error) {
-	var articles []*models.Article
+	var cacheArticles []*models.Article
+
+	cache := cache_service.Article{
+		TagId:    a.TagId,
+		State:    a.State,
+		PageNum:  a.PageNum,
+		PageSize: a.PageSize,
+	}
+	key := cache.GetArticlesKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			log.Println(err)
+		} else {
+			err := json.Unmarshal(data, &cacheArticles)
+			if err != nil {
+				log.Println(err)
+			}
+			return cacheArticles, nil
+		}
+	}
 
 	articles, err := models.GetArticles(a.PageNum, a.PageSize, a.getMaps())
 	if err != nil {
 		return nil, err
 	}
 
+	gredis.Set(key, articles, 3600)
 	return articles, nil
 }
 

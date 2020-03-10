@@ -45,6 +45,16 @@ type DataBase struct {
 
 var DataBaseSetting = &DataBase{}
 
+type Redis struct {
+	Host string
+	Password string
+	MaxIdle int
+	MaxActive int
+	IdleTimeout time.Duration
+}
+
+var RedisSetting = &Redis{}
+
 var cfg *ini.File
 
 func SetUp() {
@@ -57,6 +67,7 @@ func SetUp() {
 	mapTo("app", AppSetting)
 	mapTo("server", ServerSetting)
 	mapTo("database", DataBaseSetting)
+	mapTo("redis", RedisSetting)
 
 	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
@@ -66,7 +77,7 @@ func SetUp() {
 func mapTo(section string, v interface{}) {
 	err := cfg.Section(section).MapTo(v)
 	if err != nil {
-		log.Fatalln("Cfg.MapTo %s err: %v", section, err)
+		log.Fatalf("Cfg.MapTo %s err: %v", section, err)
 	}
 
 }
