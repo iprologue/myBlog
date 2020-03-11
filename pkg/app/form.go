@@ -1,10 +1,11 @@
 package app
 
 import (
+	"net/http"
+
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/iprologue/myBlog/common/errcode"
-	"net/http"
 )
 
 func BindAndValid(c *gin.Context, form interface{}) (int, int) {
@@ -20,7 +21,8 @@ func BindAndValid(c *gin.Context, form interface{}) (int, int) {
 	}
 
 	if !check {
-
+		MarkErrors(valid.Errors)
+		return http.StatusBadRequest, errcode.INVALID_PARAMS
 	}
 
 	return http.StatusOK, errcode.SUCCESS

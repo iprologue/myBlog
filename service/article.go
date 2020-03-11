@@ -2,10 +2,12 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
+
 	"github.com/iprologue/myBlog/models"
 	"github.com/iprologue/myBlog/pkg/gredis"
 	"github.com/iprologue/myBlog/service/cache_service"
-	"log"
 )
 
 type Article struct {
@@ -89,6 +91,7 @@ func (a *Article) GetAll() ([]*models.Article, error) {
 	key := cache.GetArticlesKey()
 	if gredis.Exists(key) {
 		data, err := gredis.Get(key)
+		fmt.Println(data, err)
 		if err != nil {
 			log.Println(err)
 		} else {
@@ -105,7 +108,10 @@ func (a *Article) GetAll() ([]*models.Article, error) {
 		return nil, err
 	}
 
-	gredis.Set(key, articles, 3600)
+	err = gredis.Set(key, articles, 3600)
+	if err != nil {
+		log.Println(err)
+	}
 	return articles, nil
 }
 

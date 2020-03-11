@@ -2,14 +2,15 @@ package upload
 
 import (
 	"fmt"
-	"github.com/iprologue/myBlog/common/util"
-	"github.com/iprologue/myBlog/pkg/file"
-	"github.com/iprologue/myBlog/pkg/setting"
 	"log"
 	"mime/multipart"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/iprologue/myBlog/common/util"
+	"github.com/iprologue/myBlog/pkg/file"
+	"github.com/iprologue/myBlog/pkg/setting"
 )
 
 func GetImageFullUrl(name string) string {
@@ -48,9 +49,7 @@ func CheckImageSize(f multipart.File) bool {
 		log.Println(err)
 		return false
 	}
-	fmt.Println("size")
-	fmt.Println(size)
-	fmt.Println(setting.AppSetting.ImageMaxSize)
+
 	return size <= setting.AppSetting.ImageMaxSize
 }
 

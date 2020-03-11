@@ -1,15 +1,15 @@
 package main
 
 import (
+	"log"
+	"syscall"
+
 	"github.com/fvbock/endless"
-	"github.com/gin-gonic/gin"
 	"github.com/iprologue/myBlog/common/util"
 	"github.com/iprologue/myBlog/models"
 	"github.com/iprologue/myBlog/pkg/gredis"
 	"github.com/iprologue/myBlog/pkg/setting"
 	"github.com/iprologue/myBlog/router"
-	"log"
-	"syscall"
 )
 
 func init() {
@@ -25,10 +25,7 @@ func main() {
 	endless.DefaultWriteTimeOut = setting.ServerSetting.WriteTimeout
 	endless.DefaultMaxHeaderBytes = 1 << 20
 
-	engine := gin.New()
-	gin.SetMode(setting.ServerSetting.RunMode)
-	router.InitRouter(engine)
-
+	engine := router.InitRouter()
 	server := endless.NewServer(setting.ServerSetting.HttpPort, engine)
 	server.BeforeBegin = func(add string) {
 		log.Printf("Actual pid is %d", syscall.Getpid())
